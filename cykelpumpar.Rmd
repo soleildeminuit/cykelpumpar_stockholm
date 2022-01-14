@@ -1,0 +1,35 @@
+---
+title: "Public bike pumps in Stockholm"
+author: "Anders Elias"
+date: '2022-01-14'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(sf)
+library(dplyr)
+library(mapview)
+
+api_key <- read.csv("data/api_key.csv")
+public_bike_pumps_url <- paste("https://openstreetgs.stockholm.se/geoservice/api/",
+api_key$key, "/wfs/?version=1.0.0&request=GetFeature&typeName=od_gis:Cykelpump_Punkt&outputFormat=SHAPE-ZIP", sep="")
+
+f <- paste(getwd(), "/data/Cykelpump_Punkt.zip", sep = "")
+
+download.file(public_bike_pumps_url,
+              f,
+              quiet = TRUE, mode = "wb")
+unzip(f, exdir = paste(getwd(), "/data", sep = ""))
+
+cykelp <- st_read("data/Cykelpump_Punkt.shp", options = "ENCODING=WINDOWS-1252")
+
+```
+
+```{r map, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
+# tmap_mode("view")
+# tm_shape(cykelp) + tm_symbols(col = "Ventiler", scale = 0.5, palette = "Spectral") + tm_text("Namn")
+public_bike_pumps <- cykelp
+mapview(cykelp)
+```
+
