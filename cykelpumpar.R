@@ -6,6 +6,8 @@ api_key <- read.csv("data/api_key.csv")
 public_bike_pumps_url <- paste("https://openstreetgs.stockholm.se/geoservice/api/",
 api_key$key, "/wfs/?version=1.0.0&request=GetFeature&typeName=od_gis:Cykelpump_Punkt&outputFormat=SHAPE-ZIP", sep="")
 
+f <- paste(getwd(), "/data/Cykelpump_Punkt.zip", sep = "")
+
 download.file(public_bike_pumps_url,
               paste(getwd(), "/data/Cykelpump_Punkt.zip", sep = ""),
               quiet = TRUE, mode = "wb")
